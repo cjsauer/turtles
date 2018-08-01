@@ -3,9 +3,9 @@
             [turtles.config :as cfg]
             [turtles.patch :as p :refer [get-attr set-attr! unset-attr! update-attr!]]
             [turtles.world :as w :refer [neighbors]]
-            [turtles.world.rectangular :refer [make-rectangular-world ]]
+            [turtles.world.rectangular :refer [make-rectangular-world]]
             [turtles.protocols
-             :refer [patch-at coord]]))
+             :refer [patch-at coord limits wrap]]))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; UI

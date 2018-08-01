@@ -1,10 +1,13 @@
 (ns turtles.protocols)
 
-;; A world is a finite play area that bounds simulations.
-(defprotocol IWorld
-  (limits [w] "Returns the coordinate extremes of world w as [minx maxx miny maxy],
-               where minx and miny are inclusive, and maxx and maxy are exclusive.")
-  (wrap [w coord] "Wraps the given coord back into the legal limits of world w."))
+(defprotocol IFinite
+  "Finite object along arbitrary dimensions."
+  (limits [x] "Returns a tuple of minimum and maximum limits along dimensions of x, e.g.
+               [[minx miny minz ...] [maxx maxy maxz ...]]"))
+
+(defprotocol IWrapped
+  "Object forming a closed surface."
+  (wrap [x coord] "Clamps the given coord onto the surface of x."))
 
 ;; A system of discrete coordinate mathematics.
 (defprotocol ICoordinateSystem

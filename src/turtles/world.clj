@@ -5,15 +5,13 @@
              :as
              proto
              :refer
-             [draw-patch limits patch-seq unit-dirs wrap]]
-            [turtles.world.rectangular :as sq]))
+             [draw-patch limits patch-seq unit-dirs wrap]]))
 
 (defn bounds
   "Returns the bounding box of world w as [width height]."
   [w]
-  (let [[minx maxx miny maxy] (limits w)]
-    [(- maxx minx)
-     (- maxy miny)]))
+  (let [[mins maxs] (limits w)]
+    (map - maxs mins)))
 
 (defn draw-world
   [w scale]

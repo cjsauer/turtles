@@ -6,10 +6,12 @@
             [turtles.protocols :as proto]))
 
 (defrecord RectangularWorld [sizex sizey patches]
-  proto/IWorld
+  proto/IFinite
   (limits
     [w]
-    [0 sizex 0 sizey])
+    [[0 0] [sizex sizey]])
+
+  proto/IWrapped
   (wrap
     [w [x y]]
     [(mod x sizex) (mod y sizey)])
