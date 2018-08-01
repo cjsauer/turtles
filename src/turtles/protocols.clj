@@ -16,7 +16,7 @@
 
 (defprotocol IPatchMatrix
   "coord->patch map"
-  (patch-at [m coord] "Retrieves value stored in coordinate index ci at coord.")
+  (patch-at [m coord] "Retrieves value stored in patch matrix p at coord.")
   (patch-seq [m] "Returns a consistent seq of all patches in matrix m."))
 
 (defprotocol IPositioned
