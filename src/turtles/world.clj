@@ -10,7 +10,7 @@
   "Returns the bounding box of world w as [width height]."
   [w]
   (let [[mins maxs] (limits w)]
-    (map - maxs mins)))
+    (mapv - maxs mins)))
 
 (defn draw-world
   [w scale]
