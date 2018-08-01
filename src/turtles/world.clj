@@ -1,16 +1,9 @@
 (ns turtles.world
   "A world is a collection of patches indexed by a finite coordinate system."
-  (:require [turtles.protocols :as proto]
+  (:require [turtles.math :as math]
+            [turtles.protocols :as proto
+             :refer [limits wrap patch-seq get-at draw-patch unit-dirs]]
             [turtles.world.square :as sq]))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Protocol functions
-
-(def limits proto/limits)
-(def wrap proto/wrap)
-(def patch-seq proto/patch-seq)
-(def location proto/location)
-(def draw-patch proto/draw-patch)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Constructors
@@ -33,3 +26,15 @@
   [w scale]
   (doseq [p (patch-seq w)]
     (draw-patch w p scale)))
+
+(defn neighbors
+  "Returns the neighbors of coord as a sequence of coords."
+  [w coord]
+  (map (comp (partial proto/wrap w) math/coord+)
+       (unit-dirs w)
+       (repeat coord)))
+
+(defn deg->unit-dir
+  "Computes the unit-dir closest to the given heading in degrees."
+  [w deg]
+  (nth (unit-dirs w) (quot deg 360)))

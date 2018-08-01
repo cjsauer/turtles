@@ -1,8 +1,13 @@
 (ns turtles.core
   (:require [quil.core :as q]
             [turtles.config :as cfg]
-            [turtles.patch :as p]
-            [turtles.world :as w]))
+            [turtles.patch :as p :refer [get-attr set-attr! unset-attr! update-attr!]]
+            [turtles.world :as w :refer [make-square-world neighbors]]
+            [turtles.protocols
+             :refer [get-at coord]]))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; UI
 
 (defn- setup-sketch
   []

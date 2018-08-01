@@ -13,6 +13,9 @@
   (disj-turtle
     [p t]
     (update p :turtles disj t))
+  (get-attr
+    [p a]
+    (get p a))
   (set-attr
     [p a v]
     (assoc p a v))

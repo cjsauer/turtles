@@ -41,6 +41,10 @@
   (dosync
    (alter p-ref proto/disj-turtle t)))
 
+(defn get-attr
+  [p-ref a]
+  (proto/get-attr @p-ref a))
+
 (defn set-attr!
   [p-ref a v]
   (verify-attr! a)

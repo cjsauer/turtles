@@ -1,13 +1,17 @@
 (ns turtles.world.square
   "2D Cartesian grid world implementation."
   (:require [quil.core :as q]
+            [turtles.math :as math]
             [turtles.patch :as p]
             [turtles.protocols :as proto]))
 
 (defrecord SquareWorld [sizex sizey patches]
   proto/IWorld
-  (limits [w] [0 sizex 0 sizey])
-  (wrap [w [x y]]
+  (limits
+    [w]
+    [0 sizex 0 sizey])
+  (wrap
+    [w [x y]]
     [(mod x sizex) (mod y sizey)])
   (patch-seq
     [{:keys [patches]}]
@@ -15,8 +19,25 @@
      (doall
       (map deref (flatten patches)))))
 
+  proto/ICoordinateSystem
+  (unit-dirs
+    [w]
+    [[1 0]
+     [1 1]
+     [0 1]
+     [-1 1]
+     [-1 0]
+     [-1 -1]
+     [0 -1]
+     [1 -1]])
+  (distance
+    [w [x1 y1] [x2 y2]]
+    (math/sqrt
+     (+ (math/pow (- x2 x1) 2)
+        (math/pow (- y2 y1) 2))))
+
   proto/ICoordIndex
-  (location [w coord] (get-in patches coord))
+  (get-at [w coord] (get-in patches coord))
 
   proto/IPatchArtist
   (draw-patch
