@@ -1,11 +1,11 @@
-(ns turtles.world.square
+(ns turtles.world.rectangular
   "2D Cartesian grid world implementation."
   (:require [quil.core :as q]
             [turtles.math :as math]
             [turtles.patch :as p]
             [turtles.protocols :as proto]))
 
-(defrecord SquareWorld [sizex sizey patches]
+(defrecord RectangularWorld [sizex sizey patches]
   proto/IWorld
   (limits
     [w]
@@ -52,12 +52,12 @@
             scale
             scale)))
 
-(defn make-world
+(defn make-rectangular-world
   [sizex sizey]
   (let [patches (vec (for [x (range sizex)]
                        (vec (for [y (range sizey)]
                               (p/make-patch [x y])))))]
-    (map->SquareWorld
+    (map->RectangularWorld
      {:sizex sizex
       :sizey sizey
       :patches patches})))

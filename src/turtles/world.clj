@@ -1,19 +1,12 @@
 (ns turtles.world
   "A world is a collection of patches indexed by a finite coordinate system."
   (:require [turtles.math :as math]
-            [turtles.protocols :as proto
-             :refer [limits wrap patch-seq draw-patch unit-dirs]]
-            [turtles.world.square :as sq]))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Constructors
-
-(defn make-square-world
-  [sizex sizey]
-  (sq/make-world sizex sizey))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; API
+            [turtles.protocols
+             :as
+             proto
+             :refer
+             [draw-patch limits patch-seq unit-dirs wrap]]
+            [turtles.world.rectangular :as sq]))
 
 (defn bounds
   "Returns the bounding box of world w as [width height]."
