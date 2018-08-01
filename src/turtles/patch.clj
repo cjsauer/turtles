@@ -1,9 +1,4 @@
 (ns turtles.patch
-  "A patch:
-   - Is a clojure ref allowing for coordinated, concurrent updates
-   - Contains a set of turtles
-   - Contains arbitrary key-value pairs for domain-specific data (e.g. pheremones)
-   - Is positioned at a location"
   (:require [turtles.protocols :as proto]))
 
 (defrecord BasicPatch [coord turtles]

@@ -1,5 +1,4 @@
 (ns turtles.world
-  "A world is a collection of patches indexed by a finite coordinate system."
   (:require [clojure.core :refer [quot]]
             [turtles.math :as math]
             [turtles.protocols

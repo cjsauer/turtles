@@ -39,9 +39,8 @@
     (get-in patches coord))
   (patch-seq
     [{:keys [patches]}]
-    (dosync
-     (doall
-      (map deref (flatten patches)))))
+    (doall
+     (map deref (flatten patches))))
 
   proto/IPatchArtist
   (draw-patch

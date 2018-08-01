@@ -15,9 +15,9 @@
   (unit-dirs [sys] "Returns a vector of coords representing the valid movement offsets."))
 
 (defprotocol IPatched
-  "Broken up into patches."
-  (patch-at [m coord] "Retrieves value stored in patch matrix p at coord.")
-  (patch-seq [m] "Returns a consistent seq of all patches in matrix m."))
+  "Broken up into patches along its dimensions."
+  (patch-at [m coord] "Retrieves patch located at coordinate coord.")
+  (patch-seq [m] "Returns a seq of all patches in m."))
 
 (defprotocol IPositioned
   "Situated in space."
