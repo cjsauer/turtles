@@ -2,7 +2,7 @@
   "A world is a collection of patches indexed by a finite coordinate system."
   (:require [turtles.math :as math]
             [turtles.protocols :as proto
-             :refer [limits wrap patch-seq get-at draw-patch unit-dirs]]
+             :refer [limits wrap patch-seq draw-patch unit-dirs]]
             [turtles.world.square :as sq]))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -30,7 +30,7 @@
 (defn neighbors
   "Returns the neighbors of coord as a sequence of coords."
   [w coord]
-  (map (comp (partial proto/wrap w) math/coord+)
+  (map (comp (partial wrap w) math/coord+)
        (unit-dirs w)
        (repeat coord)))
 

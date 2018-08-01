@@ -4,7 +4,7 @@
             [turtles.patch :as p :refer [get-attr set-attr! unset-attr! update-attr!]]
             [turtles.world :as w :refer [make-square-world neighbors]]
             [turtles.protocols
-             :refer [get-at coord]]))
+             :refer [patch-at coord]]))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; UI

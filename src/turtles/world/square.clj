@@ -13,11 +13,6 @@
   (wrap
     [w [x y]]
     [(mod x sizex) (mod y sizey)])
-  (patch-seq
-    [{:keys [patches]}]
-    (dosync
-     (doall
-      (map deref (flatten patches)))))
 
   proto/ICoordinateSystem
   (unit-dirs
@@ -36,8 +31,15 @@
      (+ (math/pow (- x2 x1) 2)
         (math/pow (- y2 y1) 2))))
 
-  proto/ICoordIndex
-  (get-at [w coord] (get-in patches coord))
+  proto/IPatchMatrix
+  (patch-at
+    [w coord]
+    (get-in patches coord))
+  (patch-seq
+    [{:keys [patches]}]
+    (dosync
+     (doall
+      (map deref (flatten patches)))))
 
   proto/IPatchArtist
   (draw-patch

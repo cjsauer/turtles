@@ -4,17 +4,17 @@
 (defprotocol IWorld
   (limits [w] "Returns the coordinate extremes of world w as [minx maxx miny maxy],
                where minx and miny are inclusive, and maxx and maxy are exclusive.")
-  (wrap [w coord] "Wraps the given coord back into the legal limits of world w.")
-  (patch-seq [w] "Returns a consistent seq of all patches in world w."))
+  (wrap [w coord] "Wraps the given coord back into the legal limits of world w."))
 
 ;; A system of discrete coordinate mathematics.
 (defprotocol ICoordinateSystem
   (distance [sys coord1 coord2] "Returns the distance between coord1 and coord2.")
   (unit-dirs [sys] "Returns a vector of coords representing the valid movement offsets."))
 
-;; coord->value map
-(defprotocol ICoordIndex
-  (get-at [ci coord] "Retrieves value stored in coordinate index ci at coord."))
+;; coord->patch map
+(defprotocol IPatchMatrix
+  (patch-at [m coord] "Retrieves value stored in coordinate index ci at coord.")
+  (patch-seq [m] "Returns a consistent seq of all patches in matrix m."))
 
 ;; Situated in space.
 (defprotocol IPositioned
