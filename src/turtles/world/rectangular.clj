@@ -3,7 +3,7 @@
   (:require [quil.core :as q]
             [turtles.math :as math]
             [turtles.patch :as p]
-            [turtles.protocols :as proto]))
+            [turtles.protocols :as proto :refer [xpos ypos get-attr]]))
 
 (defrecord RectangularWorld [sizex sizey patches]
   proto/IFinite
@@ -45,14 +45,14 @@
 
   proto/IPatchArtist
   (draw-patch
-    [_
-     {:keys [color], :as p, :or {color [0 0 0]}}
-     scale]
-    (apply q/fill color)
-    (q/rect (* scale (proto/xpos p))
-            (* scale (proto/ypos p))
-            scale
-            scale)))
+    [_ patch scale]
+    (let [patch-color (or (get-attr patch :color)
+                          [0 0 0])]
+      (apply q/fill patch-color)
+      (q/rect (* scale (xpos patch))
+              (* scale (ypos patch))
+              scale
+              scale))))
 
 (defn make-rectangular-world
   [sizex sizey]
