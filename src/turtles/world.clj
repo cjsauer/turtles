@@ -1,9 +1,8 @@
 (ns turtles.world
   "A world is a collection of patches indexed by a finite coordinate system."
-  (:require [turtles.math :as math]
+  (:require [clojure.core :refer [quot]]
+            [turtles.math :as math]
             [turtles.protocols
-             :as
-             proto
              :refer
              [draw-patch limits patch-seq unit-dirs wrap]]))
 
@@ -28,4 +27,6 @@
 (defn deg->unit-dir
   "Computes the unit-dir closest to the given heading in degrees."
   [w deg]
-  (nth (unit-dirs w) (quot deg 360)))
+  (let [udirs (unit-dirs w)
+        div (quot 360 (count udirs))]
+    (nth udirs (quot deg div))))
