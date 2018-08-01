@@ -33,7 +33,7 @@
      (+ (math/pow (- x2 x1) 2)
         (math/pow (- y2 y1) 2))))
 
-  proto/IPatchMatrix
+  proto/IPatched
   (patch-at
     [w coord]
     (get-in patches coord))

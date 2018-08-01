@@ -1,7 +1,7 @@
 (ns turtles.protocols)
 
 (defprotocol IFinite
-  "Finite object along arbitrary dimensions."
+  "Characterized by n finite dimensions."
   (limits [x] "Returns a tuple of minimum and maximum limits along dimensions of x, e.g.
                [[minx miny minz ...] [maxx maxy maxz ...]]"))
 
@@ -14,8 +14,8 @@
   (distance [sys coord1 coord2] "Returns the distance between coord1 and coord2.")
   (unit-dirs [sys] "Returns a vector of coords representing the valid movement offsets."))
 
-(defprotocol IPatchMatrix
-  "coord->patch map"
+(defprotocol IPatched
+  "Broken up into patches."
   (patch-at [m coord] "Retrieves value stored in patch matrix p at coord.")
   (patch-seq [m] "Returns a consistent seq of all patches in matrix m."))
 
