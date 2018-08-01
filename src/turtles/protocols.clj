@@ -26,6 +26,10 @@
 (defn xpos [o] (first (coord o)))
 (defn ypos [o] (second (coord o)))
 
+(defprotocol IIdentifiable
+  "Uniquely described by some value."
+  (id [x] "Returns the unique id of x."))
+
 (defprotocol IInhabited
   "Populated by turtles."
   (turtles [w] "Returns a seq of all turtles inhabiting w.")

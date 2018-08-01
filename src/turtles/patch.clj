@@ -7,6 +7,9 @@
   (:require [turtles.protocols :as proto]))
 
 (defrecord BasicPatch [coord turtles]
+  proto/IIdentifiable
+  (id [_] coord)
+
   proto/IPositioned
   (coord [_] coord)
 
