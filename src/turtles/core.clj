@@ -1,6 +1,5 @@
 (ns turtles.core
   (:require [quil.core :as q]
-            [turtles.config :as cfg]
             [turtles.patch :as p :refer [get-attr set-attr! unset-attr! update-attr!]]
             [turtles.world :as w :refer [neighbors]]
             [turtles.world.rectangular :refer [make-rectangular-world]]
@@ -9,6 +8,8 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; UI
+
+(def px-scale 3)
 
 (defn- setup-sketch
   []
@@ -21,6 +22,6 @@
   (q/sketch
    :title "Turtles"
    :setup setup-sketch
-   :draw #(w/draw-world world cfg/px-scale)
-   :size (map #(* cfg/px-scale %)
+   :draw #(w/draw-world world px-scale)
+   :size (map #(* px-scale %)
               (w/bounds world))))
