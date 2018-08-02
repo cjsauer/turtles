@@ -2,12 +2,12 @@
   (:require [quil.core :as q]
             [turtles.world :as w]))
 
-(def px-scale 2)
+(def px-scale 5)
 
 (defn- setup-sketch
   []
   (q/background 0)
-  (q/frame-rate 30))
+  (q/frame-rate 60))
 
 (defn start-sketch
   "Creates a new quil sketch of the given world."
