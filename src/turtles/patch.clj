@@ -1,12 +1,16 @@
 (ns turtles.patch
-  (:require [turtles.protocols :as proto]))
+  (:require [turtles.protocols :as proto]
+            [clojure.set :as set]))
 
-(defrecord BasicPatch [coord turtles]
+(defrecord Patch [coord turtles]
   proto/IIdentifiable
   (id [_] coord)
 
   proto/IPositioned
   (coord [_] coord)
+
+  proto/IColored
+  (color [p] (get p :color [0 0 0]))
 
   proto/IInhabited
   (turtles
@@ -18,12 +22,9 @@
   (remove-turtle
     [p t]
     (update p :turtles disj t))
-
-  proto/IAttributed
-  (get-attr [p a] (get p a))
-  (set-attr [p a v] (assoc p a v))
-  (unset-attr [p a] (dissoc p a))
-  (update-attr [p a f] (update p a f)))
+  (select-turtles
+    [p pred]
+    (set/select pred turtles)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Constructors
@@ -34,37 +35,4 @@
   (-> (or attrs {})
       (merge {:coord coord
               :turtles #{}})
-      map->BasicPatch
-      ref))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Mutation API
-
-(defn add-turtle!
-  [p-ref t]
-  (dosync
-   (alter p-ref proto/add-turtle t)))
-
-(defn remove-turtle!
-  [p-ref t]
-  (dosync
-   (alter p-ref proto/remove-turtle t)))
-
-(defn get-attr
-  [p-ref a]
-  (proto/get-attr @p-ref a))
-
-(defn set-attr!
-  [p-ref a v]
-  (dosync
-   (alter p-ref proto/set-attr a v)))
-
-(defn unset-attr!
-  [p-ref a]
-  (dosync
-   (alter p-ref proto/unset-attr a)))
-
-(defn update-attr!
-  [p-ref a f]
-  (dosync
-   (alter p-ref proto/update-attr a f)))
+      map->Patch))

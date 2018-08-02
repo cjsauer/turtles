@@ -19,12 +19,17 @@
   (patch-at [m coord] "Retrieves patch located at coordinate coord.")
   (patch-seq [m] "Returns a seq of all patches in m."))
 
+(defprotocol IWorld
+  "Mutable environment that is the setting for simulations."
+  (update-patch! [w p f] "Mutates patch p in world w by applying it to function f."))
+
 (defprotocol IPositioned
   "Situated in space."
   (coord [o] "Returns the position of o as a coord."))
 
-(defn xpos [o] (first (coord o)))
-(defn ypos [o] (second (coord o)))
+(defprotocol IColored
+  "Colorful."
+  (color [o] "Returns the color of object o as [r g b]."))
 
 (defprotocol IIdentifiable
   "Uniquely described by some value."
@@ -34,14 +39,8 @@
   "Populated by turtles."
   (turtles [w] "Returns a seq of all turtles inhabiting w.")
   (add-turtle [w t] "Adds turtle t to inhabitants of w.")
-  (remove-turtle [w t] "Removes turtle t from inhabitants of w."))
-
-(defprotocol IAttributed
-  "Describable with arbitrary key-value pairs."
-  (get-attr [m a] "Returns the value mapped to a, or nil if not found.")
-  (set-attr [m a v] "Sets attribute a to value v.")
-  (unset-attr [m a] "Removes attribute a from m.")
-  (update-attr [m a f] "Updates the value associated with a in m by applying f to its current value."))
+  (remove-turtle [w t] "Removes turtle t from inhabitants of w.")
+  (select-turtles [w pred] "Returns all turtles in w satisfying predicate pred."))
 
 (defprotocol IPatchArtist
   "Renderer of patches."

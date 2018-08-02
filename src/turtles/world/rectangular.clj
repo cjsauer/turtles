@@ -3,7 +3,7 @@
   (:require [quil.core :as q]
             [turtles.math :as math]
             [turtles.patch :as p]
-            [turtles.protocols :as proto :refer [xpos ypos get-attr]]))
+            [turtles.protocols :as proto]))
 
 (defrecord RectangularWorld [sizex sizey patches]
   proto/IFinite
@@ -36,28 +36,36 @@
   proto/IPatched
   (patch-at
     [w coord]
-    (get-in patches coord))
+    @(get-in patches coord))
   (patch-seq
     [{:keys [patches]}]
-    (doall
-     (map deref (flatten patches))))
+    (map deref (flatten patches)))
+
+  proto/IWorld
+  (update-patch!
+    [w p f]
+    (dosync
+     (let [p* (get-in patches (proto/coord p))]
+       (alter p* f))))
 
   proto/IPatchArtist
   (draw-patch
     [_ patch scale]
-    (let [patch-color (or (get-attr patch :color)
-                          [0 0 0])]
+    (let [patch-color (proto/color patch)
+          [x y] (proto/coord patch)]
       (apply q/fill patch-color)
-      (q/rect (* scale (xpos patch))
-              (* scale (ypos patch))
+      (q/rect (* scale x)
+              (* scale y)
               scale
               scale))))
 
 (defn make-rectangular-world
   [sizex sizey]
-  (let [patches (vec (for [x (range sizex)]
-                       (vec (for [y (range sizey)]
-                              (p/make-patch [x y])))))]
+  (let [patches (vec
+                 (for [x (range sizex)]
+                   (vec
+                    (for [y (range sizey)]
+                      (ref (p/make-patch [x y]))))))]
     (map->RectangularWorld
      {:sizex sizex
       :sizey sizey
