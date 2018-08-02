@@ -39,7 +39,9 @@
     @(get-in patches coord))
   (patch-seq
     [{:keys [patches]}]
-    (map deref (flatten patches)))
+    (dosync
+     (doall
+      (map deref (flatten patches)))))
 
   proto/IWorld
   (update-patch!
@@ -65,7 +67,8 @@
                  (for [x (range sizex)]
                    (vec
                     (for [y (range sizey)]
-                      (ref (p/make-patch [x y]))))))]
+                      (ref (p/make-patch [x y])
+                           :min-history 100)))))]
     (map->RectangularWorld
      {:sizex sizex
       :sizey sizey
