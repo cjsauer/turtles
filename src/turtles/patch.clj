@@ -10,21 +10,7 @@
   (coord [_] coord)
 
   proto/IColored
-  (color [p] (get p :color [0 0 0]))
-
-  proto/IInhabited
-  (turtles
-    [p]
-    (seq turtles))
-  (add-turtle
-    [p t]
-    (update p :turtles conj t))
-  (remove-turtle
-    [p t]
-    (update p :turtles disj t))
-  (select-turtles
-    [p pred]
-    (set/select pred turtles)))
+  (color [p] (get p :color [0 0 0])))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Constructors

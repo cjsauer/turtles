@@ -3,9 +3,10 @@
   (:require [quil.core :as q]
             [turtles.math :as math]
             [turtles.patch :as p]
-            [turtles.protocols :as proto]))
+            [turtles.protocols :as proto]
+            [clojure.set :as set]))
 
-(defrecord RectangularWorld [sizex sizey patches]
+(defrecord RectangularWorld [sizex sizey patches turtles]
   proto/IFinite
   (limits
     [w]
@@ -43,12 +44,35 @@
      (doall
       (map deref (flatten patches)))))
 
+  proto/IInhabited
+  (turtles
+    [w]
+    (dosync
+     (doall
+      (map deref (vals @turtles)))))
+  (select-turtles
+    [w pred]
+    (dosync
+     (let [tset (into #{} (proto/turtles w))]
+       (set/select pred tset))))
+
   proto/IWorld
   (update-patch!
     [w p f]
     (dosync
      (let [p* (get-in patches (proto/coord p))]
        (alter p* f))))
+  (add-turtle!
+    [w t]
+    (swap! turtles assoc (proto/id t) (ref t)))
+  (remove-turtle!
+    [w t]
+    (swap! turtles dissoc (proto/id t)))
+  (update-turtle!
+    [w t f]
+    (dosync
+     (when-let [turt (get @turtles (proto/id t))]
+       (alter turt f))))
 
   proto/IPatchArtist
   (draw-patch
@@ -56,6 +80,17 @@
     (let [patch-color (proto/color patch)
           [x y] (proto/coord patch)]
       (apply q/fill patch-color)
+      (q/rect (* scale x)
+              (* scale y)
+              scale
+              scale)))
+
+  proto/ITurtleArtist
+  (draw-turtle
+    [_ t scale]
+    (let [turtle-color (proto/color t)
+          [x y] (proto/coord t)]
+      (apply q/fill turtle-color)
       (q/rect (* scale x)
               (* scale y)
               scale
@@ -72,4 +107,5 @@
     (map->RectangularWorld
      {:sizex sizex
       :sizey sizey
-      :patches patches})))
+      :patches patches
+      :turtles (atom {})})))

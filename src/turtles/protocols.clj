@@ -21,7 +21,15 @@
 
 (defprotocol IWorld
   "Mutable environment that is the setting for simulations."
-  (update-patch! [w p f] "Mutates patch p in world w by applying it to function f."))
+  (update-patch! [w p f] "Mutates patch p in world w by applying it to function f.")
+  (add-turtle! [w t] "Adds turtle t to world w.")
+  (remove-turtle! [w t] "Removes turtle t from world w.")
+  (update-turtle! [w t f] "Mutates turtle t in world w by applying it to function f."))
+
+(defprotocol IInhabited
+  "Populated by turtles."
+  (turtles [w] "Returns a seq of all turtles inhabiting w.")
+  (select-turtles [w pred] "Returns all turtles in w satisfying predicate pred."))
 
 (defprotocol IPositioned
   "Situated in space."
@@ -35,13 +43,26 @@
   "Uniquely described by some value."
   (id [x] "Returns the unique id of x."))
 
-(defprotocol IInhabited
-  "Populated by turtles."
-  (turtles [w] "Returns a seq of all turtles inhabiting w.")
-  (add-turtle [w t] "Adds turtle t to inhabitants of w.")
-  (remove-turtle [w t] "Removes turtle t from inhabitants of w.")
-  (select-turtles [w pred] "Returns all turtles in w satisfying predicate pred."))
-
 (defprotocol IPatchArtist
   "Renderer of patches."
   (draw-patch [artist p scale] "Draws patch p to the screen at given scale."))
+
+(defprotocol ITurtleArtist
+  "Renderer of turtles."
+  (draw-turtle [artist t scale] "Draws turtle t to the screen at given scale."))
+
+(defprotocol IMobile
+  "Supports physical movement."
+  (heading [o] "Returns the current heading of o in degrees.")
+  (forward [o n sys] "Moves o forward by n units in coordinate system sys.")
+  (right [o n] "Turns o to the right by n degrees."))
+
+(defn backward
+  "Moves o backward by n units in coordinate system sys."
+  [o n sys]
+  (forward o (- n) sys))
+
+(defn left
+  "Turns o left by n degrees."
+  [o n]
+  (right o (- n)))
