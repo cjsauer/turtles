@@ -13,13 +13,7 @@
   (reset! world (wrect/make-rectangular-world sizex sizey))
   (ui/start-sketch @world))
 
-(defn- lift-daemon
-  [f]
-  (fn [ctx]
-    (f ctx)
-    ctx))
-
-(defn activate-daemon
+(defn- activate-daemon
   [fns]
   (when @world
     (doseq [f fns]
@@ -33,9 +27,17 @@
     (d/deactivate-daemon d)
     (swap! daemons disj d)))
 
-(defn random-color-deamon
-  [{:keys [world]}]
-  (let [[maxx maxy] (w/bounds world)
-        p (patch-at world [(rand-int maxx) (rand-int maxy)])
-        color [(rand-int 255) (rand-int 255) (rand-int 255)]]
-    (update-patch! world p #(assoc % :color color))))
+(defn activate-patch-daemon
+  [fns]
+  (activate-daemon
+   (map (fn [f]
+          (fn [{:keys [world] :as ctx}]
+            (let [[maxx maxy] (w/bounds world)
+                  p (patch-at world [(rand-int maxx) (rand-int maxy)])]
+              (f (assoc ctx :patch p)))))
+        fns)))
+
+(defn random-color-daemon
+  [{:keys [world patch]}]
+  (let [color [(rand-int 255) (rand-int 255) (rand-int 255)]]
+    (update-patch! world patch #(assoc % :color color))))
