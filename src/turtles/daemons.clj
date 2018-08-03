@@ -1,24 +1,32 @@
 (ns turtles.daemons)
 
-(defrecord Daemon [ctx op active?])
+;; Overload the printer for queues so they look like fish
+(defmethod print-method clojure.lang.PersistentQueue [q, w]
+  (print-method '<- w)
+  (print-method (seq q) w)
+  (print-method '-< w))
 
-(defn- run
-  [{:keys [ctx op active?] :as d}]
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Implementation
+
+(defrecord Daemon [ctx fns active?])
+
+(defn- cycle-chain
+  [{:keys [ctx fns active?] :as d}]
   (when active?
-    (send *agent* run)
-    (op ctx))
+    (send *agent* cycle-chain))
+  (doseq [f fns] (f ctx))
   d)
 
 (defn- activate
   [d]
-  (send *agent* run)
+  (send *agent* cycle-chain)
   (assoc d :active? true))
 
 (defn- deactivate
   [d]
   (assoc d :active? false))
 
-;; TODO: Improve daemon error handling.
 (def latest-failure (atom nil))
 (defn- agent-error-handler
   [a ex]
@@ -27,18 +35,12 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; API
 
-(defn activate-daemon
-  [ctx op]
-  (let [deamon (->Daemon ctx op true)
-        dagent (agent deamon :error-handler agent-error-handler)]
-    (send dagent run)))
+(defn activate-daemon [ctx fns]
+  (let [deamon (->Daemon ctx fns true)
+        dagent (agent deamon
+                      :error-handler agent-error-handler)]
+    (send dagent activate)))
 
-(defn deactivate-daemon
-  [dagent]
-  (send dagent deactivate)
-  (await dagent)
-  dagent)
-
-(defn restart-daemon
-  [dagent]
-  (send dagent activate))
+(defn deactivate-daemon [d]
+  (send d deactivate)
+  true)

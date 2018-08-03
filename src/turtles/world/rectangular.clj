@@ -43,6 +43,9 @@
     (dosync
      (doall
       (map deref (flatten patches)))))
+  (patch-seq!
+    [{:keys [patches]}]
+    (map deref (flatten patches)))
 
   proto/IInhabited
   (turtles

@@ -3,7 +3,7 @@
             [turtles.math :as math]
             [turtles.protocols
              :refer
-             [draw-patch limits patch-seq unit-dirs wrap turtles draw-turtle]]))
+             [draw-patch limits patch-seq! unit-dirs wrap turtles draw-turtle]]))
 
 (defn bounds
   "Returns the bounding box of world w as [width height]."
@@ -13,7 +13,7 @@
 
 (defn draw-world
   [w scale]
-  (doseq [p (patch-seq w)]
+  (doseq [p (patch-seq! w)]
     (draw-patch w p scale))
   (doseq [t (turtles w)]
     (draw-turtle w t scale)))

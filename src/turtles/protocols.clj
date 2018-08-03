@@ -17,7 +17,8 @@
 (defprotocol IPatched
   "Broken up into patches along its dimensions."
   (patch-at [m coord] "Retrieves patch located at coordinate coord.")
-  (patch-seq [m] "Returns a seq of all patches in m."))
+  (patch-seq [m] "Returns a seq of all patches in m.")
+  (patch-seq! [m] "Returns a possibly inconsistent view of m (fast)."))
 
 (defprotocol IWorld
   "Mutable environment that is the setting for simulations."
