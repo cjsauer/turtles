@@ -57,6 +57,7 @@
         pherfn (comp k (partial patch-at world) coord)
         sorted (into (sorted-map) (zipmap (map pherfn mvmts) mvmts))
         best-move (last sorted)]
+    (reset! debugging best-move)
     (if (< minv (key best-move))
       (val best-move)
       turtle)))
@@ -106,12 +107,12 @@
 (defn wiggle-daemon
   [{:keys [world turtle-id]}]
   (let [t (first (select-turtles world #(= turtle-id (id %))))]
-    (update-turtle! world t #(right % (- (rand-int 40) 20)))))
+    (update-turtle! world t #(right % (- (rand-int 10) 5)))))
 
 (defn sniff-daemon
   [{:keys [world turtle-id]}]
   (let [t (first (select-turtles world #(= turtle-id (id %))))]
-   (update-turtle! world t #(follow-gradient world % :pheremone 2))))
+   (update-turtle! world t #(follow-gradient world % :pheremone 0.1))))
 
 (defn drop-pheremone-daemon
   [{:keys [world turtle-id]}]
@@ -124,7 +125,6 @@
   [{:keys [world patch-coord]}]
   (let [patch (patch-at world patch-coord)
         nbrs (map (partial patch-at world) (neighbors world patch-coord))
-        _ (reset! debugging nbrs)
         retain-pct 0.95
         pher-src (get patch :pheremone 0)
         src-share (* pher-src retain-pct)
@@ -147,9 +147,9 @@
 
 (comment
   (do (deactivate-all-daemons)
-      (start-new-world 100 100)
-      (create-turtles 750)
-      (activate-patch-daemon [evaporation-daemon display-pheremone-daemon diffusion-daemon])
+      (start-new-world 50 100)
+      (create-turtles 5)
+      (activate-patch-daemon [#_evaporation-daemon display-pheremone-daemon diffusion-daemon])
       (activate-turtle-daemon [walk-daemon wiggle-daemon drop-pheremone-daemon sniff-daemon]))
 
   )

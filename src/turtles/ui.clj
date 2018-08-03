@@ -7,7 +7,7 @@
 (defn- setup-sketch
   []
   (q/background 0)
-  (q/frame-rate 1))
+  (q/frame-rate 30))
 
 (defn start-sketch
   "Creates a new quil sketch of the given world."
