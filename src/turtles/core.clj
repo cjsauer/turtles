@@ -57,7 +57,6 @@
         pherfn (comp k (partial patch-at world) coord)
         sorted (into (sorted-map) (zipmap (map pherfn mvmts) mvmts))
         best-move (last sorted)]
-    (reset! debugging best-move)
     (if (< minv (key best-move))
       (val best-move)
       turtle)))
